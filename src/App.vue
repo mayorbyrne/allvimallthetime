@@ -3,7 +3,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 import TheWelcome from "./components/TheWelcome.vue";
 
 function handleSelect(event: Event): void {
-  console.log(event.target.value);
+  console.log((event.target as HTMLSelectElement).value);
 }
 </script>
 
