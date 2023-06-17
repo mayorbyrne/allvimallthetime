@@ -5,6 +5,10 @@ import TheWelcome from "./components/TheWelcome.vue";
 function handleSelect(event: Event): void {
   console.log((event.target as HTMLSelectElement).value);
 }
+function checkThis(event: Event): void {
+  (event.target as HTMLSelectElement).value = "-1";
+  console.log("hello:", event.target.value);
+}
 </script>
 
 <template>
@@ -19,7 +23,7 @@ function handleSelect(event: Event): void {
 
     <div class="wrapper">
       <HelloWorld msg="Hello From Kevin!!" />
-      <select v-on:change="handleSelect">
+      <select v-on:change="handleSelect" v-on:mousedown="checkThis">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
