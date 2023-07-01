@@ -1,68 +1,98 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-import TheWelcome from "./components/TheWelcome.vue";
+  import { ref } from "vue";
 
-function handleSelect(event: Event): void {
-  console.log((event.target as HTMLSelectElement).value);
-}
-function checkThis(event: Event): void {
-  (event.target as HTMLSelectElement).value = "-1";
-  console.log("hello:", event.target.value);
-}
+  const tableData = ref([{
+    "id": 1,
+    "name": "name 1",
+    "age": 5
+  }, {
+    "id": 2,
+    "name": "name 2",
+    "age": 10
+  }, {
+    "id": 3,
+    "name": "name 3",
+    "age": 15
+  }, {
+    "id": 4,
+    "name": "name 4",
+    "age": 20
+  }, {
+    "id": 5,
+    "name": "name 5",
+    "age": 25
+  }
+  ]);
+
+  let currentPage = ref(1);
+
+  // add pagination handlers for the buttons
+  const handlePrevious = () => {
+    console.log("Previous button clicked");
+    currentPage.value--;
+    if (currentPage.value < 1) {
+      currentPage.value = 1;
+    }
+
+  };
+ 
+  const handleNext = () => {
+    console.log("Next button clicked");
+    currentPage.value++;
+    const maxPage = Math.ceil(tableData.value.length / 3);
+    if (currentPage.value > maxPage) {
+      currentPage.value = maxPage;
+    }
+  };
+  
 </script>
 
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="./assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="Hello From Kevin!!" />
-      <select v-on:change="handleSelect" v-on:mousedown="checkThis">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <!-- add a table to display the tableData, but
+    limit it to 3 items per page -->
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- use the slice method to limit the tableData
+        based on currentPage and to 3 items per page -->
+      <tr v-for="item in tableData.slice((currentPage - 1) * 3, currentPage * 3)" :key="item.id">
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.age }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- add pagination buttons for the table -->
+  <div>
+    <button v-on:click="handlePrevious">Previous</button>
+    <button v-on:click="handleNext">Next</button>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: orange;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+/* style the table header */
+th {
+  background-color: #4caf50;
+  color: white;
 }
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+/* style the table rows */
+tr:nth-child(even) {
+  background-color: #123456;
+}
+/* style the table data cells */
+td {
+  border: 1px solid #ddd;
 }
 </style>
